@@ -1,0 +1,6 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "protocol-001",
+  "op": "ping"
+}
