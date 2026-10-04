@@ -1,9 +1,0 @@
-{
-  "protocol": "luna-wormhole",
-  "version": 1,
-  "id": "ssh-test-001",
-  "ok": true,
-  "op": "ping",
-  "processed_at": "2026-10-04T21:50:38.479197+00:00",
-  "result": "PONG FROM RASPBERRY PI"
-}
