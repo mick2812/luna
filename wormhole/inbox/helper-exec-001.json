@@ -1,7 +1,0 @@
-{
-  "protocol": "luna-wormhole",
-  "version": 1,
-  "id": "helper-exec-001",
-  "op": "exec",
-  "command": "hostname"
-}
