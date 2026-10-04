@@ -1,0 +1,8 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "e2e-write-001",
+  "op": "write_file",
+  "path": "e2e-test.txt",
+  "content": "Hello from the other side of the wormhole!"
+}
