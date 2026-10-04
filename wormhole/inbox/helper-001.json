@@ -1,0 +1,5 @@
+"ok": true,
+"op": "ping",
+"result": "PONG FROM RASPBERRY PI",
+"protocol": "luna-wormhole",
+"version": 1
