@@ -1,0 +1,9 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "e2e-001",
+  "ok": true,
+  "op": "ping",
+  "processed_at": "2026-10-04T18:20:01.234928+00:00",
+  "result": "PONG FROM RASPBERRY PI"
+}
