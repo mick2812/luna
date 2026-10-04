@@ -1,0 +1,10 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "e2e-write-001",
+  "ok": true,
+  "op": "write_file",
+  "processed_at": "2026-10-04T18:26:12.245620+00:00",
+  "path": "e2e-test.txt",
+  "bytes_written": 42
+}
