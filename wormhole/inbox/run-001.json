@@ -1,5 +1,0 @@
-{
-  "id": "run-001",
-  "op": "exec",
-  "command": "hostname"
-}
