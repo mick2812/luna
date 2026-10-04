@@ -1,0 +1,7 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "helper-read-001",
+  "op": "read_file",
+  "path": "helper-test.txt"
+}
