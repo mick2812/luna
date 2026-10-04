@@ -1,0 +1,18 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "capabilities-003",
+  "ok": true,
+  "op": "capabilities",
+  "processed_at": "2026-10-04T17:47:49.787756+00:00",
+  "capabilities": [
+    "ping",
+    "capabilities",
+    "exec",
+    "read_file",
+    "write_file"
+  ],
+  "exec_commands": [
+    "hostname"
+  ]
+}
