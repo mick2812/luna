@@ -1,0 +1,8 @@
+{
+  "id": "write-001",
+  "ok": true,
+  "op": "write_file",
+  "path": "wormhole-test.txt",
+  "bytes_written": 29,
+  "processed_at": "2026-10-04T14:31:44.210522+00:00"
+}
