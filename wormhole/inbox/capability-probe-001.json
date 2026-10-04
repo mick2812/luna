@@ -1,0 +1,7 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "capability-probe-001",
+  "op": "capabilities",
+  "auto_cleanup": false
+}
