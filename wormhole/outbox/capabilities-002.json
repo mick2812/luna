@@ -1,0 +1,16 @@
+{
+  "id": "capabilities-002",
+  "ok": true,
+  "op": "capabilities",
+  "capabilities": [
+    "ping",
+    "capabilities",
+    "exec"
+  ],
+  "exec_commands": [
+    "hostname"
+  ],
+  "processed_at": "2026-10-04T15:55:59.949191+00:00",
+  "protocol": "luna-wormhole",
+  "version": 1
+}
