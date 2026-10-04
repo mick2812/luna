@@ -1,0 +1,10 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "char-probe-001",
+  "ok": true,
+  "op": "write_file",
+  "processed_at": "2026-10-04T22:48:23.214394+00:00",
+  "path": "character-probe.txt",
+  "bytes_written": 375
+}
