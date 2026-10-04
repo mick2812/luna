@@ -1,0 +1,5 @@
+{
+  "id": "read-002",
+  "op": "read_file",
+  "path": "../hello.txt"
+}
