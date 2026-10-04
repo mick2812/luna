@@ -1,8 +1,0 @@
-{
-  "id": "read-003",
-  "ok": true,
-  "op": "read_file",
-  "path": "wormhole-test.txt",
-  "content": "The wormhole wrote this AGAIN!",
-  "processed_at": "2026-10-04T14:57:21.558474+00:00"
-}
