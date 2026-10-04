@@ -1,8 +1,0 @@
-{
-  "protocol": "luna-wormhole",
-  "version": 1,
-  "id": "helper-write-001",
-  "op": "write_file",
-  "path": "helper-test.txt",
-  "content": "Hello from the regenerated wormhole!"
-}
