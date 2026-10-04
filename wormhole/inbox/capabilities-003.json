@@ -1,6 +1,0 @@
-{
-  "protocol": "luna-wormhole",
-  "version": 1,
-  "id": "capabilities-003",
-  "op": "capabilities"
-}
