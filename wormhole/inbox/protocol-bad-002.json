@@ -1,6 +1,0 @@
-{
-  "protocol": "luna-wormhole",
-  "version": 999,
-  "id": "protocol-bad-002",
-  "op": "ping"
-}
