@@ -1,0 +1,7 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "sha-001",
+  "op": "ping",
+  "auto_cleanup": false
+}
