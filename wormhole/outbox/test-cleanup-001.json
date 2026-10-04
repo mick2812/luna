@@ -1,0 +1,9 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "test-cleanup-001",
+  "ok": true,
+  "op": "ping",
+  "processed_at": "2026-10-04T19:42:23.537219+00:00",
+  "result": "PONG FROM RASPBERRY PI"
+}
