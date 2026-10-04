@@ -1,0 +1,8 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "char-probe-002",
+  "op": "read_file",
+  "path": "character-probe.txt",
+  "auto_cleanup": false
+}
