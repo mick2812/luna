@@ -1,0 +1,5 @@
+{
+  "id": "read-003",
+  "op": "read_file",
+  "path": "wormhole-test.txt"
+}
