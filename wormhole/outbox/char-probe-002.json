@@ -1,0 +1,10 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "id": "char-probe-002",
+  "ok": true,
+  "op": "read_file",
+  "processed_at": "2026-10-04T22:51:28.999450+00:00",
+  "path": "character-probe.txt",
+  "content": "ASCII: abc XYZ 123\nPunctuation: ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ ] ^ _ ` { | } ~\nQuotes: single 'double \"backslash \\\nJSON-ish: {\"key\":\"value\",\"array\":[1,2,3]}\nWhitespace: one\ttwo\nUnicode: \u00a3 \u20ac \u00a9 \u2122 \u00b5 \u00b1 \u00d7 \u00f7\nEmoji: \ud83e\uddf9 \ud83d\ude08 \ud83d\ude80 \u2764\ufe0f\nAccents: caf\u00e9 na\u00efve r\u00e9sum\u00e9 d\u00e9j\u00e0\nShell-ish: $(echo hello) ; rm -rf / && echo \"nope\"\nMultiline:\nline two\nline three"
+}
