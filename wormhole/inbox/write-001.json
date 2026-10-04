@@ -1,0 +1,6 @@
+{
+  "id": "write-001",
+  "op": "write_file",
+  "path": "wormhole-test.txt",
+  "content": "Written through the wormhole!"
+}
