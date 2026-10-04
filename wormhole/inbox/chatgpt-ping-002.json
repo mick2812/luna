@@ -1,7 +1,0 @@
-{
-  "protocol": "luna-wormhole",
-  "version": 1,
-  "id": "chatgpt-ping-002",
-  "op": "ping",
-  "auto_cleanup": true
-}
