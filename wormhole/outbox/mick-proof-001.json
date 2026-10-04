@@ -1,0 +1,9 @@
+{
+  "id": "mick-proof-001",
+  "ok": true,
+  "op": "ping",
+  "result": "PONG FROM RASPBERRY PI",
+  "processed_at": "2026-10-04T16:42:58.188447+00:00",
+  "protocol": "luna-wormhole",
+  "version": 1
+}
