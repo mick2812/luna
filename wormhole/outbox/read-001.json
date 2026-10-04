@@ -1,0 +1,8 @@
+{
+  "id": "read-001",
+  "ok": true,
+  "op": "read_file",
+  "path": "hello.txt",
+  "content": "Hello from the other side of the wormhole!\n",
+  "processed_at": "2026-10-04T14:23:12.755504+00:00"
+}
