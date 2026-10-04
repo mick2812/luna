@@ -1,9 +1,0 @@
-{
-  "id": "protocol-bad-002",
-  "ok": false,
-  "op": "ping",
-  "error": "unsupported protocol version",
-  "processed_at": "2026-10-04T15:49:19.137868+00:00",
-  "protocol": "luna-wormhole",
-  "version": 1
-}
