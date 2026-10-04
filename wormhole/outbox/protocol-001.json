@@ -1,0 +1,7 @@
+{
+  "id": "protocol-001",
+  "ok": true,
+  "op": "ping",
+  "result": "PONG FROM RASPBERRY PI",
+  "processed_at": "2026-10-04T15:18:45.061365+00:00"
+}
