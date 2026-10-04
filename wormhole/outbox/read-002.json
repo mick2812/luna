@@ -1,0 +1,7 @@
+{
+  "id": "read-002",
+  "ok": false,
+  "op": "read_file",
+  "error": "path outside sandbox",
+  "processed_at": "2026-10-04T14:25:57.777725+00:00"
+}
