@@ -1,0 +1,9 @@
+{
+  "id": "mick-proof-002",
+  "ok": false,
+  "op": "make_coffee",
+  "error": "operation not allowed",
+  "processed_at": "2026-10-04T16:45:03.194794+00:00",
+  "protocol": "luna-wormhole",
+  "version": 1
+}
