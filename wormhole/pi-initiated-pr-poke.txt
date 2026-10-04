@@ -1,0 +1,2 @@
+Hello from the Raspberry Pi.
+This commit was initiated by the Pi.
