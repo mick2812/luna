@@ -57,6 +57,8 @@ are relative to the fixed root. Empty path means the archive root.
 | `stat` | `path` | Type, byte size, modification time in ns |
 | `hash` | `path` | SHA-256, up to 256 MiB |
 | `read` | `path`, `offset`, `length`, `encoding`, `gzip` | Bounded file bytes/text |
+| `catalog_start` | optional `path` | Start resumable recursive metadata catalogue |
+| `catalog_next` | `job` | Continue a saved catalogue page |
 
 Lists default to 100 entries and permit 500; use `next_offset` for another page.
 Pagination assumes a stable archive; concurrent changes can shift pages. A search
@@ -64,6 +66,8 @@ visits at most 100,000 entries and has a time budget. If a scan reaches its budg
 `truncated` is true with a warning; narrow the starting path instead of assuming a
 complete result. Links, inaccessible entries, and unsafe names are skipped and
 counted. Search examines filenames, not file contents.
+
+For a complete recursive inventory, send `catalog_start` with a unique request ID (and optional starting `path`). The helper saves scan progress locally under its state directory and returns up to 250 path/type/size records per response. While `complete` is false, send the returned `next_operation` with `next_args`; continue until `complete` is true. This avoids the 20-second recursive-search budget. Catalogue entries and paths are published to the public repository, but no file contents are read.
 
 Reads default to 16 KiB, maximum 64 KiB per response. Default encoding is base64
 for exact recovery; `utf-8` and `cp1252` previews replace undecodable bytes. Text

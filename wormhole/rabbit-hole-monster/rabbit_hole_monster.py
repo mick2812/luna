@@ -26,7 +26,7 @@ REPO = 'mick2812/luna'
 BRANCH = 'main'
 MAILBOX = 'wormhole/windows-sambar'
 TARGET = 'windows-sambar'
-OPS = ('ping', 'capabilities', 'list', 'search', 'stat', 'hash', 'read')
+OPS = ('ping', 'capabilities', 'list', 'search', 'stat', 'hash', 'read', 'catalog_start', 'catalog_next')
 MAX_READ = 65536
 MAX_HASH = 256 * 1024 * 1024
 ID = re.compile(r'[A-Za-z0-9][A-Za-z0-9_-]{0,79}\Z')
@@ -229,7 +229,65 @@ class Archive:
                 return result
 
 
-def process(archive, command, request_id):
+def catalog_step(archive, state_dir, command):
+    op = command.get('op')
+    args = command.get('args', {})
+    if not isinstance(args, dict):
+        raise ValueError('arguments must be an object')
+    if op == 'catalog_start':
+        if set(args) - {'path'}:
+            raise ValueError('operation or arguments not allowed')
+        root = '/'.join(parts(args.get('path', '')))
+        with archive.guard(root) as folder:
+            if not folder.is_dir():
+                raise ValueError('catalogue root must be a directory')
+        job = command['id']
+        jobfile = state_dir / (job + '.catalog.json')
+        if jobfile.exists():
+            raise ValueError('catalogue job already exists; use a new request id')
+        data = {'root': root, 'pending': [{'path': root, 'offset': 0}],
+                'complete': False, 'processed': 0}
+    elif op == 'catalog_next':
+        if set(args) != {'job'} or not isinstance(args.get('job'), str) or not ID.fullmatch(args['job']):
+            raise ValueError('catalog_next requires a valid job id')
+        job = args['job']
+        jobfile = state_dir / (job + '.catalog.json')
+        if not jobfile.exists():
+            raise ValueError('catalogue job not found')
+        data = json.loads(jobfile.read_text(encoding='utf-8'))
+    else:
+        raise ValueError('operation not allowed')
+
+    entries, skipped = [], 0
+    deadline = time.monotonic() + 15
+    while data['pending'] and len(entries) < 250 and time.monotonic() < deadline:
+        current = data['pending'].pop(0)
+        page = archive.execute('list', {'path': current['path'], 'offset': current['offset'],
+                                        'limit': min(250, 250 - len(entries))})
+        entries.extend(page['entries'])
+        skipped += page['skipped']
+        for item in page['entries']:
+            if item['kind'] == 'directory':
+                data['pending'].append({'path': item['path'], 'offset': 0})
+        if page['truncated'] and page['next_offset'] is not None:
+            data['pending'].append({'path': current['path'], 'offset': page['next_offset']})
+        data['processed'] += len(page['entries'])
+        if not page['entries'] and page['truncated']:
+            # Avoid a tight loop if a single enormous directory cannot make progress.
+            data['pending'].insert(0, current)
+            break
+    data['complete'] = not data['pending']
+    temp = jobfile.with_suffix('.tmp')
+    temp.write_text(json.dumps(data), encoding='utf-8')
+    temp.replace(jobfile)
+    return dict(job=job, root=data['root'], entries=entries, skipped=skipped,
+                complete=data['complete'], processed=data['processed'],
+                remaining_directories=len(data['pending']),
+                next_operation=None if data['complete'] else 'catalog_next',
+                next_args=None if data['complete'] else {'job': job})
+
+
+def process(archive, command, request_id, state_dir=None):
     response = dict(protocol='luna-wormhole', version=1, target=TARGET, id=request_id,
                     op=command.get('op') if isinstance(command, dict) else None, processed_at=now())
     try:
@@ -238,7 +296,13 @@ def process(archive, command, request_id):
             or command.get('version') != 1 or command.get('target') != TARGET
             or command.get('id') != request_id or not ID.fullmatch(request_id)):
             raise ValueError('invalid request envelope')
-        response.update(ok=True, result=archive.execute(command.get('op'), command.get('args', {})))
+        if command.get('op') in ('catalog_start', 'catalog_next'):
+            if state_dir is None:
+                raise ValueError('catalogue state unavailable')
+            result = catalog_step(archive, state_dir, command)
+        else:
+            result = archive.execute(command.get('op'), command.get('args', {}))
+        response.update(ok=True, result=result)
     except (ValueError, OSError, EOFError, TypeError, zlib.error) as exc:
         # No absolute paths, tokens, or exception bodies in remote diagnostics.
         response.update(ok=False, error=str(exc) if isinstance(exc, ValueError) else 'archive read failed',
@@ -325,7 +389,7 @@ def poll(github, archive, state):
             except (ValueError, KeyError, RecursionError):
                 command = None
             audit(state, 'request', id=request_id, command=command)
-            response = process(archive, command, request_id)
+            response = process(archive, command, request_id, state)
             temp = pending.with_suffix('.tmp')
             temp.write_text(json.dumps(response), encoding='utf-8')
             temp.replace(pending)

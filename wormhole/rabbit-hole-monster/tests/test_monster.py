@@ -92,6 +92,35 @@ class ArchiveTests(unittest.TestCase):
         r = self.runop('search', pattern='*.WRL')['result']
         self.assertEqual([e['path'] for e in r['entries']], ['worlds/old.wrl'])
 
+    def test_resumable_catalogue_covers_nested_tree(self):
+        many = self.root / 'many'; many.mkdir()
+        for i in range(251):
+            (many / f'{i:03}.txt').write_text('fixture')
+        before = self.snapshot()
+        state = self.base / 'catalog-state'; state.mkdir()
+        start = command('catalog_start')
+        first = rhm.process(self.archive, start, 'test-001', state)
+        self.assertTrue(first['ok'])
+        all_entries = list(first['result']['entries'])
+        self.assertFalse(first['result']['complete'])
+        next_command = command('catalog_next', job='test-001')
+        next_command['id'] = 'test-002'
+        second = rhm.process(self.archive, next_command, 'test-002', state)
+        self.assertTrue(second['ok'])
+        all_entries.extend(second['result']['entries'])
+        self.assertTrue(second['result']['complete'])
+        paths = {e['path'] for e in all_entries}
+        self.assertEqual(len(paths), 256)
+        self.assertIn('many/250.txt', paths)
+        self.assertEqual(len(paths), len(all_entries))
+        self.assertEqual(self.snapshot(), before)
+
+    def test_catalogue_rejects_duplicate_job(self):
+        state = self.base / 'catalog-state'; state.mkdir()
+        self.assertTrue(rhm.process(self.archive, command('catalog_start'), 'test-001', state)['ok'])
+        again = rhm.process(self.archive, command('catalog_start'), 'test-002', state)
+        self.assertFalse(again['ok'])
+
     def test_symlink_escape(self):
         outside = self.base / 'outside'; outside.mkdir()
         (outside / 'secret').write_text('secret')
