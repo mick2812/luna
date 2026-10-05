@@ -1,11 +1,11 @@
 # Rabbit Hole Monster — Sambar archive helper
 
-A read-only Windows worker for Michael's `G:\sambar70` archive, using the existing
+A read-only Windows worker for Michael's `\\Bigdaddy\g\sambar70` archive, using the existing
 `mick2812/luna` GitHub wormhole. Python 3.11 or newer; no pip packages needed.
 
 ## Start
 
-Download the repository ZIP, extract it somewhere outside `G:\sambar70`, open
+Download the repository ZIP, extract it somewhere outside `\\Bigdaddy\g\sambar70`, open
 `wormhole/rabbit-hole-monster`, and double-click `Start-Rabbit-Hole-Monster.cmd`.
 The launcher finds Python automatically. If `GITHUB_TOKEN` is already set it is
 reused; otherwise a hidden prompt asks for a token for this session only. Use a

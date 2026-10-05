@@ -21,7 +21,7 @@ import urllib.request
 import zlib
 from datetime import datetime, timezone
 
-ROOT = r'G:\sambar70'
+ROOT = r'\\Bigdaddy\g\sambar70'
 REPO = 'mick2812/luna'
 BRANCH = 'main'
 MAILBOX = 'wormhole/windows-sambar'
