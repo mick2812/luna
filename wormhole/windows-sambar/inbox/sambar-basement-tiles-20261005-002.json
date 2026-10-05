@@ -1,0 +1,1 @@
+{"protocol":"luna-wormhole","version":1,"target":"windows-sambar","id":"sambar-basement-tiles-20261005-002","op":"read","args":{"path":"docs/vrml/bspworld/bspWorld.wrl","gzip":true,"encoding":"utf-8","length":16384}}
