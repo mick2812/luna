@@ -1,0 +1,8 @@
+{
+  "protocol": "luna-wormhole",
+  "version": 1,
+  "target": "windows-sambar",
+  "id": "sambar-capabilities-20261005-001",
+  "op": "capabilities",
+  "args": {}
+}

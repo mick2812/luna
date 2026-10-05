@@ -1,0 +1,25 @@
+name: Rabbit Hole Monster tests
+on:
+  push:
+    paths:
+      - 'wormhole/rabbit-hole-monster/**'
+      - '.github/workflows/rabbit-hole-monster.yml'
+  pull_request:
+    paths:
+      - 'wormhole/rabbit-hole-monster/**'
+      - '.github/workflows/rabbit-hole-monster.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Archive boundary and transport tests
+        run: python -m unittest discover -s wormhole/rabbit-hole-monster/tests -v
