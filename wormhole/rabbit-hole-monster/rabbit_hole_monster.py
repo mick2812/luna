@@ -18,6 +18,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import zlib
 from datetime import datetime, timezone
 
 ROOT = r'G:\sambar70'
@@ -162,6 +163,9 @@ class Archive:
                                             next_offset=None, warning='scan budget reached; narrow path')
                             children.append(child.name)
                 for name in sorted(children, key=lambda s: (s.casefold(), s)):
+                    if time.monotonic() > deadline:
+                        return dict(entries=entries, skipped=skipped, truncated=True,
+                                    next_offset=None, warning='scan budget reached; narrow path')
                     childrel = '/'.join(filter(None, (directory, name)))
                     try:
                         info = self.metadata(childrel)
@@ -234,7 +238,7 @@ def process(archive, command, request_id):
             or command.get('id') != request_id or not ID.fullmatch(request_id)):
             raise ValueError('invalid request envelope')
         response.update(ok=True, result=archive.execute(command.get('op'), command.get('args', {})))
-    except (ValueError, OSError, EOFError, TypeError) as exc:
+    except (ValueError, OSError, EOFError, TypeError, zlib.error) as exc:
         # No absolute paths, tokens, or exception bodies in remote diagnostics.
         response.update(ok=False, error=str(exc) if isinstance(exc, ValueError) else 'archive read failed',
                         error_type=type(exc).__name__)
@@ -317,7 +321,7 @@ def poll(github, archive, state):
                 if len(raw) > 16384:
                     raise ValueError('request too large')
                 command = json.loads(raw)
-            except (ValueError, KeyError):
+            except (ValueError, KeyError, RecursionError):
                 command = None
             audit(state, 'request', id=request_id, command=command)
             response = process(archive, command, request_id)

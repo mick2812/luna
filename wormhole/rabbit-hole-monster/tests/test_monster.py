@@ -8,7 +8,6 @@ import subprocess
 import sys
 import tempfile
 import unittest
-from unittest import mock
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import rabbit_hole_monster as rhm
 
@@ -79,6 +78,10 @@ class ArchiveTests(unittest.TestCase):
         self.assertTrue(r['more'])
         self.assertFalse(self.runop('read', path='packed.gz', gzip=True, offset=1048576)['ok'])
         self.assertFalse(self.runop('read', path='readme.txt', gzip=True)['ok'])
+
+    def test_corrupt_gzip_is_rejected(self):
+        (self.root / 'corrupt.gz').write_bytes(b'\x1f\x8b\x08\x00' + b'\x00' * 6 + b'\xff' * 30)
+        self.assertFalse(self.runop('read', path='corrupt.gz', gzip=True)['ok'])
 
     def test_pagination_and_search(self):
         a = self.runop('list', limit=2)['result']
