@@ -77,7 +77,8 @@ def windows_lock(path):
     # READ_ATTRIBUTES; share READ/WRITE, deliberately omit DELETE.
     handle = create(str(path), 0x80, 3, None, 3, 0x02200000, None)
     if handle == ctypes.c_void_p(-1).value:
-        raise OSError(ctypes.get_last_error(), 'cannot lock archive path')
+        code = ctypes.get_last_error()
+        raise OSError(code, 'cannot lock archive path: ' + ctypes.FormatError(code).strip(), str(path))
     try:
         info = Info()
         if not getinfo(handle, ctypes.byref(info)):
@@ -363,6 +364,17 @@ def main():
     if os.name != 'nt':
         parser.error('The live helper runs only on Windows; tests use temporary fixtures.')
     archive = Archive(ROOT)
+    print('Checking archive:', ROOT, flush=True)
+    try:
+        root_info = archive.root.lstat()
+    except OSError as exc:
+        raise ValueError(
+            f'Windows cannot access {ROOT!r} (Windows error {exc.winerror}). '
+            'Check this exact folder in File Explorer and run the helper as your normal user, '
+            'not as administrator. No archive requests have been processed.'
+        ) from None
+    if not stat.S_ISDIR(root_info.st_mode):
+        raise ValueError(f'Archive root is not a directory: {ROOT}')
     with archive.guard() as root:
         if not root.is_dir():
             raise ValueError('archive root is not a directory')
