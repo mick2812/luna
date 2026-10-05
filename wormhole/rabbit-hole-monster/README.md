@@ -7,8 +7,9 @@ A read-only Windows worker for Michael's `\\Bigdaddy\g\sambar70` archive, using 
 
 Download the repository ZIP, extract it somewhere outside `\\Bigdaddy\g\sambar70`, open
 `wormhole/rabbit-hole-monster`, and double-click `Start-Rabbit-Hole-Monster.cmd`.
-The launcher finds Python automatically. If `GITHUB_TOKEN` is already set it is
-reused; otherwise a hidden prompt asks for a token for this session only. Use a
+The launcher finds Python automatically. If `GITHUB_TOKEN` or `GH_TOKEN` is already set it is
+reused. The helper checks the process environment, then saved Windows user and
+system environment variables (so a stale launcher environment is supported); otherwise a hidden prompt asks for a token for this session only. Use a
 fine-grained token restricted to `mick2812/luna`, Contents: read and write.
 Never put the token into a request, source file, repository, or chat.
 

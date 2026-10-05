@@ -356,6 +356,38 @@ def single_instance(state):
             msvcrt.locking(lock.fileno(), msvcrt.LK_UNLCK, 1)
 
 
+def environment_token():
+    """Read only the two supported token variables; never print their values."""
+    names = ('GITHUB_TOKEN', 'GH_TOKEN')
+    for name in names:
+        value = os.environ.get(name, '').strip()
+        if value:
+            return value
+    if os.name == 'nt':
+        import winreg
+        locations = (
+            (winreg.HKEY_CURRENT_USER, 'Environment'),
+            (winreg.HKEY_LOCAL_MACHINE,
+             r'SYSTEM\CurrentControlSet\Control\Session Manager\Environment'),
+        )
+        for hive, path in locations:
+            try:
+                with winreg.OpenKey(hive, path, 0, winreg.KEY_READ) as key:
+                    for name in names:
+                        try:
+                            value, kind = winreg.QueryValueEx(key, name)
+                        except OSError:
+                            continue
+                        if kind in (winreg.REG_SZ, winreg.REG_EXPAND_SZ) and isinstance(value, str):
+                            if kind == winreg.REG_EXPAND_SZ:
+                                value = winreg.ExpandEnvironmentStrings(value)
+                            if value.strip():
+                                return value.strip()
+            except OSError:
+                continue
+    return ''
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--once', action='store_true', help='poll once and stop')
@@ -381,7 +413,10 @@ def main():
     if options.check:
         print('Archive boundary OK:', ROOT)
         return
-    token = os.environ.get('GITHUB_TOKEN') or getpass.getpass('GitHub token (hidden; not saved): ')
+    token = environment_token()
+    if not token:
+        print('No GITHUB_TOKEN or GH_TOKEN found in this process or saved Windows environment.')
+        token = getpass.getpass('GitHub token (hidden; not saved): ')
     if not token.strip():
         raise ValueError('GitHub token is required')
     state = Path(os.environ['LOCALAPPDATA']) / 'Luna' / 'RabbitHoleMonster'

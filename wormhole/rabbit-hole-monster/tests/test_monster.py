@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import rabbit_hole_monster as rhm
 
@@ -191,6 +192,27 @@ class TransportTests(unittest.TestCase):
         self.github.document = []
         rhm.poll(self.github, self.archive, self.state)
         self.assertFalse(self.github.output['ok'])
+
+
+class TokenTests(unittest.TestCase):
+    def test_process_token_precedence(self):
+        with mock.patch.dict(os.environ, {'GITHUB_TOKEN': ' example-one ', 'GH_TOKEN': 'example-two'}, clear=True):
+            self.assertEqual(rhm.environment_token(), 'example-one')
+
+    def test_gh_token_alias(self):
+        with mock.patch.dict(os.environ, {'GITHUB_TOKEN': '', 'GH_TOKEN': ' example-two '}, clear=True):
+            self.assertEqual(rhm.environment_token(), 'example-two')
+
+    def test_saved_windows_environment(self):
+        fake = mock.MagicMock()
+        fake.REG_SZ, fake.REG_EXPAND_SZ = 1, 2
+        def lookup(key, name):
+            if name == 'GH_TOKEN':
+                return ('saved-example', 1)
+            raise FileNotFoundError()
+        fake.QueryValueEx.side_effect = lookup
+        with mock.patch.dict(os.environ, {}, clear=True), mock.patch.object(rhm.os, 'name', 'nt'), mock.patch.dict(sys.modules, {'winreg': fake}):
+            self.assertEqual(rhm.environment_token(), 'saved-example')
 
 
 if __name__ == '__main__':
