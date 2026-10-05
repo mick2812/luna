@@ -1,0 +1,1 @@
+{"protocol": "luna-wormhole", "version": 1, "target": "windows-sambar", "id": "sambar-basement-homes-20261005-001", "op": "list", "processed_at": "2026-10-05T15:51:45.430150+00:00", "ok": true, "result": {"entries": [{"path": "docs/vrml/homes/friar.WRL", "kind": "file", "size": 176729, "modified_ns": 1181540905250000000}], "skipped": 0, "truncated": false, "next_offset": null}}
